@@ -12,116 +12,131 @@ window.onload = function () {
     form.style.display = 'none'
 }
 
-function Book (tittle, author, pages, read) {
+class Book {
 
-    this.id = crypto.randomUUID()
-    this.tittle = tittle
-    this.author = author
-    this.pages = pages
-    this.read = read
+    constructor(tittle, author, pages, read) {
+        
+        this.id = crypto.randomUUID()
+        this.tittle = tittle
+        this.author = author
+        this.pages = pages 
+        this.read = read
+        
+    }
     
+    toogleReadStatus() {
 
+        this.read = this.read === "read" ? "not read" : "read"
+        return this.read
+    }
 }
 
-Book.prototype.toogleReadStatus = function () {
+class LibraryApp {
 
-    this.read = this.read === "read" ? "not read" : "read"
-    return this.read
-}
+    constructor() {
 
+        this.Library = [],
 
-const Library = [];
-
-
-function addBookToLibrary(tittle, author, pages, read) {
-
-    const book = new Book(tittle, author, pages, read)
-    
-    Library.push(book)
-}
-
-
-newBookBtn.addEventListener('click', () => {
-
-    if(form.style.display == "none") {
-        form.style.display = "block"
-    } else {
-        form.style.display = "none"
+        this.eventHandler()
     }
 
-    form.addEventListener('submit', (event) => {
+    eventHandler() {
+
+        newBookBtn.addEventListener('click', () => {
+
+            if(form.style.display == "none") {
+
+                form.style.display = "block"
+
+            } else {
+                form.style.display = "none"
+            }
         
-        event.preventDefault()
-           
-        let bookTittle = tittle.value
-        let booAuthor = author.value
-        let bookPages = pages.value
-        let readStatus = read.value
-
-        tittle.value = ""
-        author.value = ""
-        pages.value = ""
-        read.value = ""
-
-        addBookToLibrary(bookTittle,booAuthor,bookPages,readStatus)
-        displayBooks()
+            form.addEventListener('submit', (event) => {
+                
+                event.preventDefault()
+                   
+                let bookTittle = tittle.value
+                let booAuthor = author.value
+                let bookPages = pages.value
+                let readStatus = read.value
         
+                tittle.value = ""
+                author.value = ""
+                pages.value = ""
+                read.value = ""
         
-       
-    })
+                this.addBookToLibrary(bookTittle,booAuthor,bookPages,readStatus)
+                this.displayBooks()
+                
+                
+               
+            })
+        
+        })
 
-})
+    }
+    addBookToLibrary(tittle, author, pages, read) {
 
+        const book = new Book(tittle, author, pages, read)
+    
+        this.Library.push(book)
 
-function displayBooks() {
+    }
 
-    output.innerHTML = "";
+    displayBooks() {
 
-    Library.forEach((book) => {
+        output.innerHTML = "";
 
-        const row = document.createElement('tr')
-        row.setAttribute('class', 'tr')
+        this.Library.forEach((book) => {
 
-        for(let key of Object.keys(book)) {
+            const row = document.createElement('tr')
+            row.classList.add('tr')
 
-            const cell = document.createElement('td')
-            cell.setAttribute('class', 'td')
-            cell.textContent = book[key]
-            row.appendChild(cell)
+            const fields = ["id", "tittle", 'author', 'pages', "read"]
+            fields.forEach((key)=> {
+                const cell = document.createElement('td')
+                cell.classList.add('td')
+                cell.textContent = book[key]
+                row.appendChild(cell)
+
+            })
             
-        }
-        const toggleBtn = document.createElement("button")
-        toggleBtn.textContent = "Read Status"
-        toggleBtn.setAttribute('class', "btn")
-        toggleBtn.setAttribute('id', 'toggleBtn')
+            const toggleBtn = document.createElement("button")
+            toggleBtn.textContent = "Read Status"
+            toggleBtn.classList.add("btn")
+            toggleBtn.classList.add('toggleBtn')
 
-        toggleBtn.addEventListener('click', () =>{
-            book.toogleReadStatus()
-            row.children[4].textContent = book.read;
+            toggleBtn.addEventListener('click', () =>{
 
+                book.toogleReadStatus()
+                row.children[4].textContent = book.read;
+
+            })
+
+            row.appendChild(toggleBtn)
+
+            const delBtn = document.createElement("button")
+            delBtn.textContent = "Delete"
+            delBtn.classList.add('btn')
+            delBtn.classList.add('delBtn')
+
+            delBtn.addEventListener('click', ()=> {
+
+                let index = this.Library.indexOf(book)
+                this.Library.splice(index, 1)
+                row.remove()
+
+            })
+
+            
+            row.appendChild(delBtn)
+            
+            output.appendChild(row)
         })
 
-        row.appendChild(toggleBtn)
-
-        const delBtn = document.createElement("button")
-        delBtn.textContent = "Delete"
-        delBtn.setAttribute('class', 'btn')
-        delBtn.setAttribute('id', 'delBtn')
-
-        delBtn.addEventListener('click', ()=> {
-            let index = Library.indexOf(book)
-            Library.splice(index, 1)
-            row.remove()
-
-        })
-
-        
-        row.appendChild(delBtn)
-        
-        output.appendChild(row)
-    })
-
+    }
+    
 }
-
-
+const libraryApp = new LibraryApp()
 
