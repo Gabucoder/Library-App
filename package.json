@@ -1,0 +1,19 @@
+{
+  "name": "library_app",
+  "version": "1.0.0",
+  "description": "A library app that stores book keyed in by the user",
+  "main": "index.js",
+  "scripts": {
+    "test": "none"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Gabucoder/Library-App.git"
+  },
+  "author": "Gabriel <gabrielwanjau832@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Gabucoder/Library-App/issues"
+  },
+  "homepage": "https://github.com/Gabucoder/Library-App#readme"
+}
